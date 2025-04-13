@@ -1,6 +1,16 @@
-// app/api/cover-letter/route.ts or route.js
 import { NextResponse } from "next/server";
 import { Groq } from "groq-sdk";
+
+// Allow CORS for all origins (or you can restrict it to a specific domain)
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
 
 export async function POST(req: Request) {
   try {
@@ -8,7 +18,7 @@ export async function POST(req: Request) {
     const { name, jobRole, companyName, jd } = body;
 
     const groq = new Groq({
-      apiKey: process.env.GROQ_API_KEY, // must be set on Vercel
+      apiKey: process.env.GROQ_API_KEY,
     });
 
     const chatCompletion = await groq.chat.completions.create({
@@ -31,9 +41,9 @@ export async function POST(req: Request) {
 
     const coverLetter = chatCompletion.choices?.[0]?.message?.content || "Error generating cover letter";
 
-    return NextResponse.json({ message: "success", coverLetter });
+    return NextResponse.json({ message: "success", coverLetter }, { headers: corsHeaders });
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json({ message: "error", error: String(error) }, { status: 500 });
+    return NextResponse.json({ message: "error", error: String(error) }, { status: 500, headers: corsHeaders });
   }
 }
