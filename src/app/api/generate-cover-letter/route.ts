@@ -1,3 +1,4 @@
+// app/api/cover-letter/route.ts or route.js
 import { NextResponse } from "next/server";
 import { Groq } from "groq-sdk";
 
@@ -7,7 +8,7 @@ export async function POST(req: Request) {
     const { name, jobRole, companyName, jd } = body;
 
     const groq = new Groq({
-      apiKey: process.env.GROQ_API_KEY, // Never hardcode
+      apiKey: process.env.GROQ_API_KEY, // must be set on Vercel
     });
 
     const chatCompletion = await groq.chat.completions.create({
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "system",
-          content: `My name: ${name}, Job role: ${jobRole}, Applying company name: ${companyName}, Job description: "${jd}", My skill: ${jobRole}. Give me a cover letter. Don't explain anything. Just give me the cover letter. and dont give blank spaces or spaces to fill something in the cover letter. Just give me the cover letter. Don't give any other information. Just give me the cover letter. and dont give here is your response or something directly the cover letter you give.`,
+          content: `My name: ${name}, Job role: ${jobRole}, Applying company name: ${companyName}, Job description: "${jd}", My skill: ${jobRole}. Give me a cover letter. Don't explain anything. Just give me the cover letter.`,
         },
         {
           role: "user",
@@ -33,6 +34,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "success", coverLetter });
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json({ message: "error", error: error }, { status: 500 });
+    return NextResponse.json({ message: "error", error: String(error) }, { status: 500 });
   }
 }
