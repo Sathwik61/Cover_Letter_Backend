@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "system",
-          content: `My name: ${name}, Job role: ${jobRole}, Applying company name: ${companyName}, Job description: "${jd}", My skill: ${jobRole}. Give me a cover letter. Don't explain anything. Just give me the cover letter.`,
+          content: `My name: ${name}, Job role: ${jobRole}, Applying company name: ${companyName}, Job description: "${jd}", My skill: ${jobRole}. Give me a cover letter. Don't explain anything. Just give me the cover letter. no need to give the Here you have such messages i just need the cover letter, so give me the cover letter. Don't give me any other information. Just give me the cover letter.`,
         },
         {
           role: "user",
